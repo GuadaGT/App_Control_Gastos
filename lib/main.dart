@@ -67,7 +67,16 @@ class _HomePageState extends State<HomePage> {
   Widget _body() {
     return SafeArea(
       child: Column(
-        children: <Widget>[_selector(), _expenses(), _graph(), _list()],
+        children: <Widget>[
+          _selector(),
+          _expenses(),
+          _graph(),
+          Container(
+            color: Colors.grey.withOpacity(0.15),
+            height: 16.0,
+          ),
+          _list()
+        ],
       ),
     );
   }
@@ -105,17 +114,34 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       subtitle: Text("$percent% of expenses"),
-      trailing: Text("\$$value"),
+      trailing: Container(
+          decoration: BoxDecoration(
+            color: Colors.pink.withOpacity(0.25),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Text(
+            "\$$value",
+            style: TextStyle(
+              color: Colors.pink,
+              fontWeight: FontWeight.w500,
+              fontSize: 16.0,
+            ),
+          )),
     );
   }
 
   Widget _list() {
     return Expanded(
-      child: ListView(
-        children: <Widget>[
-          _item(FontAwesomeIcons.shoppingCart, "Shopping", 14, 145.12)
-        ],
-      ),
+      child: ListView.separated(
+          itemCount: 15,
+          itemBuilder: (BuildContext context, int index) =>
+              _item(FontAwesomeIcons.shoppingCart, "Shopping", 14, 145.12),
+          separatorBuilder: (BuildContext context, int index) {
+            return Container(
+              color: Colors.pink.withOpacity(0.15),
+              height: 8.0,
+            );
+          }),
     );
   }
 }
