@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gastos/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -24,6 +25,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late PageController _controller;
+  int currentPage = 6;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(
+      initialPage: currentPage,
+      viewportFraction: 0.4,
+    );
+  }
+
   Widget _bottomAction(IconData icon) {
     return InkWell(
       child: Padding(
@@ -81,7 +94,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _selector() => Container();
+  Widget _pageItem(String name, int position) {
+    var _aligment;
+    final selected = TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.pink.withOpacity(0.5));
+    final unSelected = TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.normal,
+        color: Colors.pink.withOpacity(0.3));
+
+    if (position == currentPage) {
+      _aligment = Alignment.center;
+    } else if (position > currentPage) {
+      _aligment = Alignment.centerRight;
+    } else {
+      _aligment = Alignment.centerLeft;
+    }
+    return Align(
+        alignment: _aligment,
+        child: Text(
+          name,
+          style: position == currentPage ? selected : unSelected,
+        ));
+  }
+
+  Widget _selector() {
+    return SizedBox.fromSize(
+      size: Size.fromHeight(70.0),
+      child: PageView(
+        onPageChanged: (newPage) {
+          setState(() {
+            currentPage = newPage;
+          });
+        },
+        controller: _controller,
+        children: <Widget>[
+          _pageItem("January", 0),
+          _pageItem("February", 1),
+          _pageItem("March", 2),
+          _pageItem("April", 3),
+          _pageItem("May", 4),
+          _pageItem("June", 5),
+          _pageItem("July", 6),
+          _pageItem("August", 7),
+          _pageItem("September", 8),
+          _pageItem("October", 9),
+          _pageItem("November", 10),
+          _pageItem("December", 11),
+        ],
+      ),
+    );
+  }
 
   Widget _expenses() {
     return Column(
