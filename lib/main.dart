@@ -2,10 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gastos/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
-void main() => runApp(MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyA27hMN6dvPIXmHsFJ5cozJweDOvak21j8",
+      authDomain: "gastos-47fab.firebaseapp.com",
+      projectId: "gastos-47fab",
+      storageBucket: "gastos-47fab.appspot.com",
+      messagingSenderId: "137916224459",
+      appId: "1:137916224459:web:f39797e5b244e0b5165c4e",
+      measurementId: "G-2RMP0WE1VM",
+    ),
+  );
+  runApp(MainApp());
+}
 
 class MainApp extends StatelessWidget {
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,6 +33,9 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       home: HomePage(),
     );
   }
@@ -95,7 +117,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _pageItem(String name, int position) {
-    var _aligment;
+    var _alignment;
     final selected = TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
@@ -106,14 +128,14 @@ class _HomePageState extends State<HomePage> {
         color: Colors.pink.withOpacity(0.3));
 
     if (position == currentPage) {
-      _aligment = Alignment.center;
+      _alignment = Alignment.center;
     } else if (position > currentPage) {
-      _aligment = Alignment.centerRight;
+      _alignment = Alignment.centerRight;
     } else {
-      _aligment = Alignment.centerLeft;
+      _alignment = Alignment.centerLeft;
     }
     return Align(
-        alignment: _aligment,
+        alignment: _alignment,
         child: Text(
           name,
           style: position == currentPage ? selected : unSelected,
