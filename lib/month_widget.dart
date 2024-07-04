@@ -3,10 +3,31 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gastos/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MonthWidget extends StatelessWidget {
+class MonthWidget extends StatefulWidget {
   final List<DocumentSnapshot> documents;
 
   MonthWidget({required this.documents});
+
+  @override
+  State<MonthWidget> createState() => _MonthWidgetState();
+}
+
+class _MonthWidgetState extends State<MonthWidget> {
+  late double totalExpenses;
+
+  @override
+  void initState() {
+    super.initState();
+    totalExpenses = _calculateTotalExpenses();
+  }
+
+  double _calculateTotalExpenses() {
+    double total = 0;
+    widget.documents.forEach((doc) {
+      total += doc['value'];
+    });
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +47,10 @@ class MonthWidget extends StatelessWidget {
   }
 
   Widget _expenses() {
-    // Ejemplo de procesamiento de documentos
-    double totalExpenses = 0;
-    documents.forEach((doc) {
-      totalExpenses +=
-          doc['value']; // Ajusta esto según tu estructura de documentos
-    });
-
     return Column(
       children: <Widget>[
         Text(
-          "\$${totalExpenses.toStringAsFixed(2)}", // Formatea el total como desees
+          "\$${totalExpenses.toStringAsFixed(2)}",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
@@ -59,14 +73,14 @@ class MonthWidget extends StatelessWidget {
     return Container(height: 250.0, child: GraphWidget());
   }
 
-  Widget _item(IconData icon, String name, int percent, double value) {
+  Widget _item(IconData icon, String name, double percent, double value) {
     return ListTile(
       leading: Icon(icon, size: 32.0),
       title: Text(
         name,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
-      subtitle: Text("$percent% of expenses"),
+      subtitle: Text("${percent.toStringAsFixed(2)}% of expenses"),
       trailing: Container(
         decoration: BoxDecoration(
           color: Colors.pink.withOpacity(0.25),
@@ -87,15 +101,17 @@ class MonthWidget extends StatelessWidget {
   Widget _list() {
     return Expanded(
       child: ListView.separated(
-        itemCount: documents.length,
+        itemCount: widget.documents.length,
         itemBuilder: (BuildContext context, int index) {
-          // Asume que cada documento tiene 'category', 'day', 'month' y 'value'
+          final document = widget.documents[index];
+          final value = document['value'].toDouble();
+          final percent = (value / totalExpenses) * 100;
+
           return _item(
             FontAwesomeIcons.shoppingCart,
-            documents[index]['category'],
-            14, // Calcula el porcentaje de gastos
-            documents[index]['value']
-                .toDouble(), // Convierte a double si es necesario
+            document['category'],
+            percent,
+            value,
           );
         },
         separatorBuilder: (BuildContext context, int index) {
