@@ -1,44 +1,51 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gastos/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MonthWidget extends StatefulWidget {
   final List<DocumentSnapshot> documents;
+  final double total;
+  final List<double> perDay;
+  final Map<String, double> categories;
 
-  MonthWidget({required this.documents});
+  MonthWidget({Key? key, required this.documents})
+      : total = documents
+            .map((doc) => (doc['value'] as num?) ?? 0.0)
+            .fold(0.0, (a, b) => a + b.toDouble()),
+        perDay = List.generate(30, (int index) {
+          return documents
+              .where((doc) => doc['day'] == (index + 1))
+              .map((doc) => (doc['value'] as num?) ?? 0.0)
+              .fold(0.0, (a, b) => a + b.toDouble());
+        }),
+        categories = documents.fold({}, (Map<String, double> map, document) {
+          String category = document['category'];
+          double value = (document['value'] as num?)?.toDouble() ?? 0.0;
+          if (!map.containsKey(category)) {
+            map[category] = 0.0;
+          }
+          map[category] = map[category]! + value;
+          return map;
+        }),
+        super(key: key);
 
   @override
-  State<MonthWidget> createState() => _MonthWidgetState();
+  _MonthWidgetState createState() => _MonthWidgetState();
 }
 
 class _MonthWidgetState extends State<MonthWidget> {
-  late double totalExpenses;
-
-  @override
-  void initState() {
-    super.initState();
-    totalExpenses = _calculateTotalExpenses();
-  }
-
-  double _calculateTotalExpenses() {
-    double total = 0;
-    widget.documents.forEach((doc) {
-      total += doc['value'];
-    });
-    return total;
-  }
-
   @override
   Widget build(BuildContext context) {
+    print(widget.categories);
     return Expanded(
       child: Column(
         children: <Widget>[
           _expenses(),
           _graph(),
           Container(
-            color: Colors.grey.withOpacity(0.15),
-            height: 16.0,
+            color: Colors.blueAccent.withOpacity(0.15),
+            height: 24.0,
           ),
           _list(),
         ],
@@ -50,11 +57,10 @@ class _MonthWidgetState extends State<MonthWidget> {
     return Column(
       children: <Widget>[
         Text(
-          "\$${totalExpenses.toStringAsFixed(2)}",
+          "\$${widget.total.toStringAsFixed(2)}",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-            color: Colors.black,
+            fontSize: 40.0,
           ),
         ),
         Text(
@@ -62,7 +68,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
-            color: Color.fromARGB(255, 228, 86, 173),
+            color: Colors.blueGrey,
           ),
         ),
       ],
@@ -70,28 +76,48 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _graph() {
-    return Container(height: 250.0, child: GraphWidget());
+    return Container(
+      height: 250.0,
+      child: GraphWidget(
+        data: widget.perDay,
+      ),
+    );
   }
 
-  Widget _item(IconData icon, String name, double percent, double value) {
+  Widget _item(IconData icon, String name, int percent, double value) {
     return ListTile(
-      leading: Icon(icon, size: 32.0),
+      leading: Icon(
+        icon,
+        size: 32.0,
+      ),
       title: Text(
         name,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+        ),
       ),
-      subtitle: Text("${percent.toStringAsFixed(2)}% of expenses"),
+      subtitle: Text(
+        "$percent% of expenses",
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.blueGrey,
+        ),
+      ),
       trailing: Container(
         decoration: BoxDecoration(
-          color: Colors.pink.withOpacity(0.25),
+          color: Colors.blueAccent.withOpacity(0.2),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        child: Text(
-          "\$$value",
-          style: TextStyle(
-            color: Colors.pink,
-            fontWeight: FontWeight.w500,
-            fontSize: 16.0,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "\$$value",
+            style: TextStyle(
+              color: Colors.blueAccent,
+              fontWeight: FontWeight.w500,
+              fontSize: 16.0,
+            ),
           ),
         ),
       ),
@@ -101,22 +127,20 @@ class _MonthWidgetState extends State<MonthWidget> {
   Widget _list() {
     return Expanded(
       child: ListView.separated(
-        itemCount: widget.documents.length,
+        itemCount: widget.categories.keys.length,
         itemBuilder: (BuildContext context, int index) {
-          final document = widget.documents[index];
-          final value = document['value'].toDouble();
-          final percent = (value / totalExpenses) * 100;
-
+          var key = widget.categories.keys.elementAt(index);
+          var data = widget.categories[key];
           return _item(
             FontAwesomeIcons.shoppingCart,
-            document['category'],
-            percent,
-            value,
+            key,
+            100 * (data ?? 0.0) ~/ widget.total,
+            data ?? 0.0,
           );
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
-            color: Colors.pink.withOpacity(0.15),
+            color: Colors.blueAccent.withOpacity(0.15),
             height: 8.0,
           );
         },

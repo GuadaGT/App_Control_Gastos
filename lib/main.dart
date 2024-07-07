@@ -125,7 +125,6 @@ class _HomePageState extends State<HomePage> {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
-
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
