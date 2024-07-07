@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
       title: "Gastos",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.green,
       ),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
@@ -51,7 +51,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _controller;
-  int currentPage = 6;
+  int currentPage = DateTime.now().month - 1; // Establece el mes actual
   late Stream<QuerySnapshot> _query;
 
   @override
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
         onPressed: () {},
         shape: CircleBorder(),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.green,
         elevation: 6.0,
       ),
       body: _body(),
@@ -129,6 +129,9 @@ class _HomePageState extends State<HomePage> {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
                 default:
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Text('No data available for this month');
+                  }
                   return MonthWidget(documents: snapshot.data!.docs);
               }
             },
@@ -143,11 +146,11 @@ class _HomePageState extends State<HomePage> {
     final selected = TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
-        color: Colors.pink.withOpacity(0.5));
+        color: Colors.green.withOpacity(0.5));
     final unSelected = TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.normal,
-        color: Colors.pink.withOpacity(0.3));
+        color: Colors.green.withOpacity(0.3));
 
     if (position == currentPage) {
       _alignment = Alignment.center;

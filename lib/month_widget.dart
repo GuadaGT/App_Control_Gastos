@@ -44,7 +44,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           _expenses(),
           _graph(),
           Container(
-            color: Colors.blueAccent.withOpacity(0.15),
+            color: Colors.greenAccent.withOpacity(0.15),
             height: 24.0,
           ),
           _list(),
@@ -68,7 +68,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
-            color: Colors.blueGrey,
+            color: Colors.greenAccent,
           ),
         ),
       ],
@@ -101,12 +101,12 @@ class _MonthWidgetState extends State<MonthWidget> {
         "$percent% of expenses",
         style: TextStyle(
           fontSize: 16.0,
-          color: Colors.blueGrey,
+          color: Colors.lightGreen,
         ),
       ),
       trailing: Container(
         decoration: BoxDecoration(
-          color: Colors.blueAccent.withOpacity(0.2),
+          color: Colors.greenAccent.withOpacity(0.2),
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Padding(
@@ -114,7 +114,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           child: Text(
             "\$$value",
             style: TextStyle(
-              color: Colors.blueAccent,
+              color: Colors.black,
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
             ),
@@ -140,7 +140,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
-            color: Colors.blueAccent.withOpacity(0.15),
+            color: Colors.greenAccent.withOpacity(0.15),
             height: 8.0,
           );
         },
