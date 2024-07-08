@@ -10,9 +10,8 @@ import 'config/firebase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await FirebaseConfig.initializeFirebase();
-
+  await FirebaseConfig
+      .initializeFirebase(); // Usa la inicialización de Firebase
   runApp(MainApp());
 }
 
@@ -58,6 +57,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateQuery() {
+    print("Current page: $currentPage, Month: ${currentPage + 1}");
     _query = FirebaseFirestore.instance
         .collection('expenses')
         .where('month', isEqualTo: currentPage + 1)
