@@ -6,21 +6,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'config/firebase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyA27hMN6dvPIXmHsFJ5cozJweDOvak21j8",
-      authDomain: "gastos-47fab.firebaseapp.com",
-      projectId: "gastos-47fab",
-      storageBucket: "gastos-47fab.appspot.com",
-      messagingSenderId: "137916224459",
-      appId: "1:137916224459:web:f39797e5b244e0b5165c4e",
-      measurementId: "G-2RMP0WE1VM",
-    ),
-  );
+  await FirebaseConfig.initializeFirebase();
 
   runApp(MainApp());
 }
@@ -51,7 +42,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _controller;
-  int currentPage = DateTime.now().month - 1; // Establece el mes actual
+  int currentPage = DateTime.now().month - 1;
   late Stream<QuerySnapshot> _query;
 
   @override
