@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gastos/category_selection_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -101,6 +102,7 @@ class _AddPageState extends State<AddPage> {
 
   Widget _num(String text, double height) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         _addDigit(text);
       },
@@ -156,7 +158,34 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-  Widget _submit() => Placeholder(
-        fallbackHeight: 50,
-      );
+  Widget _submit() {
+    return Container(
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.green,
+      ),
+      child: MaterialButton(
+        child: Text(
+          "Add expenses",
+          style: TextStyle(color: Colors.black, fontSize: 20.0),
+        ),
+        onPressed: () async {
+          if (value > 0 && category != '') {
+            await FirebaseFirestore.instance.collection('expenses').add({
+              'category': category,
+              'value': value,
+              'month': DateTime.now().month,
+              'day': DateTime.now().day,
+            });
+            Navigator.of(context).pop();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Select a value and a category")),
+            );
+          }
+        },
+      ),
+    );
+  }
 }
