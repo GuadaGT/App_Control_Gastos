@@ -57,7 +57,7 @@ class _MonthWidgetState extends State<MonthWidget> {
     return Column(
       children: <Widget>[
         Text(
-          "\$${widget.total.toStringAsFixed(2)}",
+          "\€${widget.total.toStringAsFixed(2)}",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 40.0,
@@ -112,7 +112,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "\$$value",
+            "\€$value",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,

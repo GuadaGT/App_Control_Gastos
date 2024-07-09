@@ -12,7 +12,7 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   String? category;
-  double value = 0.0;
+  final TextEditingController _valueController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class _AddPageState extends State<AddPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
-        "\$${value.toStringAsFixed(2)}",
+        "€${_valueController.text}",
         style: TextStyle(
           fontSize: 50.0,
           color: Colors.green,
@@ -83,19 +83,13 @@ class _AddPageState extends State<AddPage> {
 
   void _addDigit(String digit) {
     setState(() {
-      if (digit == ",") {
-        if (!value.toString().contains(".")) {
-          value = double.parse(value.toString() + ".");
-        }
-      } else if (digit == "backspace") {
-        if (value.toString().length > 1) {
-          value = double.parse(
-              value.toString().substring(0, value.toString().length - 1));
-        } else {
-          value = 0.0;
+      if (digit == "backspace") {
+        if (_valueController.text.isNotEmpty) {
+          _valueController.text = _valueController.text
+              .substring(0, _valueController.text.length - 1);
         }
       } else {
-        value = double.parse(value.toString() + digit);
+        _valueController.text += digit;
       }
     });
   }
@@ -147,7 +141,7 @@ class _AddPageState extends State<AddPage> {
                 _num("9", height),
               ]),
               TableRow(children: [
-                _num(",", height),
+                _num(".", height),
                 _num("0", height),
                 _num("backspace", height),
               ]),
@@ -171,7 +165,11 @@ class _AddPageState extends State<AddPage> {
           style: TextStyle(color: Colors.black, fontSize: 20.0),
         ),
         onPressed: () async {
-          if (value > 0 && category != '') {
+          double? value = double.tryParse(_valueController.text);
+          if (value != null &&
+              value > 0 &&
+              category != null &&
+              category!.isNotEmpty) {
             await FirebaseFirestore.instance.collection('expenses').add({
               'category': category,
               'value': value,
