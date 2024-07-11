@@ -153,36 +153,39 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _submit() {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.green,
-      ),
-      child: MaterialButton(
-        child: Text(
-          "Add expenses",
-          style: TextStyle(color: Colors.black, fontSize: 20.0),
+    return Hero(
+      tag: "add_button",
+      child: Container(
+        height: 50,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.green,
         ),
-        onPressed: () async {
-          double? value = double.tryParse(_valueController.text);
-          if (value != null &&
-              value > 0 &&
-              category != null &&
-              category!.isNotEmpty) {
-            await FirebaseFirestore.instance.collection('expenses').add({
-              'category': category,
-              'value': value,
-              'month': DateTime.now().month,
-              'day': DateTime.now().day,
-            });
-            Navigator.of(context).pop();
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Select a value and a category")),
-            );
-          }
-        },
+        child: MaterialButton(
+          child: Text(
+            "Add expenses",
+            style: TextStyle(color: Colors.black, fontSize: 20.0),
+          ),
+          onPressed: () async {
+            double? value = double.tryParse(_valueController.text);
+            if (value != null &&
+                value > 0 &&
+                category != null &&
+                category!.isNotEmpty) {
+              await FirebaseFirestore.instance.collection('expenses').add({
+                'category': category,
+                'value': value,
+                'month': DateTime.now().month,
+                'day': DateTime.now().day,
+              });
+              Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Select a value and a category")),
+              );
+            }
+          },
+        ),
       ),
     );
   }
