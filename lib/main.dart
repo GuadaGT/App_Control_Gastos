@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter_gastos/login_state.dart';
 import 'package:flutter_gastos/pages/login_page.dart';
 import 'package:flutter_gastos/pages/add_page.dart';
 import 'package:flutter_gastos/pages/home.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:provider/provider.dart';
 import 'config/firebase_config.dart';
 
 void main() async {

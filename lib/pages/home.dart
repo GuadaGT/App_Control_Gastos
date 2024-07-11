@@ -1,7 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gastos/login_state.dart';
 import 'package:flutter_gastos/month_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,19 +29,25 @@ class _HomePageState extends State<HomePage> {
 
   void _updateQuery() {
     print("Current page: $currentPage, Month: ${currentPage + 1}");
-    _query = FirebaseFirestore.instance
-        .collection('expenses')
-        .where('month', isEqualTo: currentPage + 1)
-        .snapshots();
+
+    final user = Provider.of<LoginState>(context, listen: false).user;
+    if (user != null) {
+      _query = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('expenses')
+          .where('month', isEqualTo: currentPage + 1)
+          .snapshots();
+    }
   }
 
-  Widget _bottomAction(IconData icon) {
+  Widget _bottomAction(IconData icon, Function callback) {
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Icon(icon),
       ),
-      onTap: () {},
+      onTap: () => callback(),
     );
   }
 
@@ -53,11 +61,13 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _bottomAction(FontAwesomeIcons.history),
-            _bottomAction(FontAwesomeIcons.chartPie),
+            _bottomAction(FontAwesomeIcons.history, () {}),
+            _bottomAction(FontAwesomeIcons.chartPie, () {}),
             SizedBox(width: 48.0),
-            _bottomAction(FontAwesomeIcons.wallet),
-            _bottomAction(Icons.settings),
+            _bottomAction(FontAwesomeIcons.wallet, () {}),
+            _bottomAction(Icons.settings, () {
+              Provider.of<LoginState>(context, listen: false).logout();
+            }),
           ],
         ),
       ),

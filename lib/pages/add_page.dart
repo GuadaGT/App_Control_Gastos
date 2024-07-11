@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gastos/category_selection_widget.dart';
+import 'package:flutter_gastos/login_state.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -167,12 +169,16 @@ class _AddPageState extends State<AddPage> {
             style: TextStyle(color: Colors.black, fontSize: 20.0),
           ),
           onPressed: () async {
+            final user = Provider.of<LoginState>(context, listen: false).user;
             double? value = double.tryParse(_valueController.text);
-            if (value != null &&
+            if (user != null &&
+                value != null &&
                 value > 0 &&
                 category != null &&
                 category!.isNotEmpty) {
-              await FirebaseFirestore.instance.collection('expenses').add({
+              final userRef =
+                  FirebaseFirestore.instance.collection('users').doc(user.uid);
+              await userRef.collection('expenses').add({
                 'category': category,
                 'value': value,
                 'month': DateTime.now().month,
