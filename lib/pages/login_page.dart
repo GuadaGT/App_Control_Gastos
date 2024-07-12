@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gastos/login_state.dart';
+import 'package:flutter_gastos/utils/login_state.dart';
 
 class LoginPage extends StatelessWidget {
   @override

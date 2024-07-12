@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_gastos/login_state.dart';
-import 'package:flutter_gastos/month_widget.dart';
+import 'package:flutter_gastos/utils/login_state.dart';
+import 'package:flutter_gastos/utils/month_widget.dart';
+import 'package:flutter_gastos/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -101,10 +102,13 @@ class _HomePageState extends State<HomePage> {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
                 default:
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return Text('No data available for this month');
-                  }
-                  return MonthWidget(documents: snapshot.data!.docs);
+                  List<DocumentSnapshot> documents = snapshot.data?.docs ?? [];
+                  int daysOfMonth =
+                      daysInMonth(DateTime.now().year, currentPage + 1);
+                  return MonthWidget(
+                    days: daysOfMonth,
+                    documents: documents,
+                  );
               }
             },
           ),
@@ -116,13 +120,15 @@ class _HomePageState extends State<HomePage> {
   Widget _pageItem(String name, int position) {
     var _alignment;
     final selected = TextStyle(
-        fontSize: 20.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.green.withOpacity(0.5));
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+      color: Colors.green.withOpacity(0.5),
+    );
     final unSelected = TextStyle(
-        fontSize: 20.0,
-        fontWeight: FontWeight.normal,
-        color: Colors.green.withOpacity(0.3));
+      fontSize: 20.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.green.withOpacity(0.3),
+    );
 
     if (position == currentPage) {
       _alignment = Alignment.center;
@@ -132,11 +138,12 @@ class _HomePageState extends State<HomePage> {
       _alignment = Alignment.centerLeft;
     }
     return Align(
-        alignment: _alignment,
-        child: Text(
-          name,
-          style: position == currentPage ? selected : unSelected,
-        ));
+      alignment: _alignment,
+      child: Text(
+        name,
+        style: position == currentPage ? selected : unSelected,
+      ),
+    );
   }
 
   Widget _selector() {

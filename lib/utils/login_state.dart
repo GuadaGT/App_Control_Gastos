@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginState with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -10,12 +11,26 @@ class LoginState with ChangeNotifier {
         : null,
   );
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  SharedPreferences? _prefs;
 
   User? _user;
   User? get user => _user;
 
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
+
+  LoginState() {
+    _initLoginState();
+  }
+
+  Future<void> _initLoginState() async {
+    _prefs = await SharedPreferences.getInstance();
+    if (_prefs!.containsKey("isLoggedIn") && _prefs!.getBool("isLoggedIn")!) {
+      _user = _auth.currentUser;
+      _loggedIn = _user != null;
+      notifyListeners();
+    }
+  }
 
   Future<User?> login() async {
     try {
@@ -39,6 +54,7 @@ class LoginState with ChangeNotifier {
       if (user != null) {
         _user = user;
         _loggedIn = true;
+        await _prefs?.setBool("isLoggedIn", true);
         notifyListeners();
         print("Signed in " + user.displayName!);
         return user;
@@ -56,6 +72,7 @@ class LoginState with ChangeNotifier {
 
     _user = null;
     _loggedIn = false;
+    await _prefs?.setBool("isLoggedIn", false);
     notifyListeners();
   }
 

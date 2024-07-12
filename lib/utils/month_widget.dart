@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gastos/graph_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gastos/utils/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MonthWidget extends StatefulWidget {
@@ -8,26 +8,34 @@ class MonthWidget extends StatefulWidget {
   final double total;
   final List<double> perDay;
   final Map<String, double> categories;
+  final int days;
 
-  MonthWidget({Key? key, required this.documents})
-      : total = documents
-            .map((doc) => (doc['value'] as num?) ?? 0.0)
-            .fold(0.0, (a, b) => a + b.toDouble()),
-        perDay = List.generate(30, (int index) {
+  MonthWidget({
+    Key? key,
+    required this.documents,
+    required this.days,
+  })  : total = documents.isNotEmpty
+            ? documents
+                .map((doc) => (doc['value'] as num?) ?? 0.0)
+                .fold(0.0, (a, b) => a + b.toDouble())
+            : 0.0,
+        perDay = List.generate(days, (index) {
           return documents
               .where((doc) => doc['day'] == (index + 1))
               .map((doc) => (doc['value'] as num?) ?? 0.0)
               .fold(0.0, (a, b) => a + b.toDouble());
         }),
-        categories = documents.fold({}, (Map<String, double> map, document) {
-          String category = document['category'];
-          double value = (document['value'] as num?)?.toDouble() ?? 0.0;
-          if (!map.containsKey(category)) {
-            map[category] = 0.0;
-          }
-          map[category] = map[category]! + value;
-          return map;
-        }),
+        categories = documents.isNotEmpty
+            ? documents.fold({}, (Map<String, double> map, document) {
+                String category = document['category'];
+                double value = (document['value'] as num?)?.toDouble() ?? 0.0;
+                if (!map.containsKey(category)) {
+                  map[category] = 0.0;
+                }
+                map[category] = map[category]! + value;
+                return map;
+              })
+            : {},
         super(key: key);
 
   @override
@@ -37,7 +45,6 @@ class MonthWidget extends StatefulWidget {
 class _MonthWidgetState extends State<MonthWidget> {
   @override
   Widget build(BuildContext context) {
-    print(widget.categories);
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -134,7 +141,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           return _item(
             FontAwesomeIcons.shoppingCart,
             key,
-            100 * (data ?? 0.0) ~/ widget.total,
+            widget.total != 0 ? (100 * (data ?? 0.0) ~/ widget.total) : 0,
             data ?? 0.0,
           );
         },
