@@ -3,18 +3,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gastos/utils/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+enum GraphType {
+  LINES,
+  PIE,
+}
+
 class MonthWidget extends StatefulWidget {
   final List<DocumentSnapshot> documents;
   final double total;
   final List<double> perDay;
   final Map<String, double> categories;
   final int days;
+  final GraphType graphType;
 
-  MonthWidget({
-    Key? key,
-    required this.documents,
-    required this.days,
-  })  : total = documents.isNotEmpty
+  MonthWidget(
+      {Key? key,
+      required this.documents,
+      required this.days,
+      required this.graphType})
+      : total = documents.isNotEmpty
             ? documents
                 .map((doc) => (doc['value'] as num?) ?? 0.0)
                 .fold(0.0, (a, b) => a + b.toDouble())
@@ -83,12 +90,24 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _graph() {
-    return Container(
-      height: 250.0,
-      child: GraphWidget(
-        data: widget.perDay,
-      ),
-    );
+    if (widget.graphType == GraphType.LINES) {
+      return Container(
+        height: 250.0,
+        child: LinesGraphWidget(
+          data: widget.perDay,
+        ),
+      );
+    } else {
+      var perCategory = widget.categories.keys
+          .map((name) => widget.categories[name]! / widget.total)
+          .toList();
+      return Container(
+        height: 250.0,
+        child: PieGraphWidget(
+          data: widget.perDay,
+        ),
+      );
+    }
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gastos/utils/add_page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_gastos/utils/login_state.dart';
@@ -30,8 +32,12 @@ class MainApp extends StatelessWidget {
               FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
             ],
             home: loginState.loggedIn ? HomePage() : LoginPage(),
-            routes: {
-              '/add': (BuildContext context) => AddPage(),
+            onGenerateRoute: (settings) {
+              if (settings.name == '/add') {
+                return AddPageTransition(
+                  AddPage(),
+                );
+              }
             },
           );
         },

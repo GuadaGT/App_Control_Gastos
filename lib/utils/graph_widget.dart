@@ -1,16 +1,55 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class GraphWidget extends StatefulWidget {
+class PieGraphWidget extends StatefulWidget {
   final List<double> data;
-
-  const GraphWidget({Key? key, required this.data}) : super(key: key);
+  const PieGraphWidget({super.key, required this.data});
 
   @override
-  _GraphWidgetState createState() => _GraphWidgetState();
+  State<PieGraphWidget> createState() => _PieGraphWidgetState();
 }
 
-class _GraphWidgetState extends State<GraphWidget> {
+class _PieGraphWidgetState extends State<PieGraphWidget> {
+  List<charts.Color> _generateGreenShades(int count) {
+    final List<charts.Color> shades = [];
+    for (int i = 0; i < count; i++) {
+      double opacity = 0.3 + (i / (count - 1)) * 0.7;
+      final shade =
+          charts.ColorUtil.fromDartColor(Colors.green.withOpacity(opacity));
+      shades.add(shade);
+    }
+    return shades;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final shades = _generateGreenShades(widget.data.length);
+    List<charts.Series<double, int>> series = [
+      charts.Series<double, int>(
+        id: 'Gasto',
+        colorFn: (_, index) => shades[index ?? 0],
+        domainFn: (value, index) => index ?? 0,
+        measureFn: (value, _) => value,
+        data: widget.data,
+        strokeWidthPxFn: (_, __) => 4,
+      )
+    ];
+    return charts.PieChart(series);
+  }
+}
+
+class LinesGraphWidget extends StatefulWidget {
+  final List<double> data;
+
+  const LinesGraphWidget({Key? key, required this.data}) : super(key: key);
+
+  @override
+  _LinesGraphWidgetState createState() => _LinesGraphWidgetState();
+}
+
+class _LinesGraphWidgetState extends State<LinesGraphWidget> {
   void _onSelectionChanged(charts.SelectionModel model) {
     final selectedDatum = model.selectedDatum;
 
