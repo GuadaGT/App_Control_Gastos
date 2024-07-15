@@ -61,19 +61,23 @@ class LoginState with ChangeNotifier {
       }
     } catch (error) {
       print("Error in sign in: $error");
-      return null;
+      throw error;
     }
     return null;
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
-    await _googleSignIn.signOut();
-
-    _user = null;
-    _loggedIn = false;
-    await _prefs?.setBool("isLoggedIn", false);
-    notifyListeners();
+    try {
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+      _user = null;
+      _loggedIn = false;
+      await _prefs?.setBool("isLoggedIn", false);
+      notifyListeners();
+    } catch (error) {
+      print("Error in sign out: $error");
+      throw error;
+    }
   }
 
   User? getCurrentUser() {

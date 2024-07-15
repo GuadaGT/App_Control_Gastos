@@ -1,13 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gastos/utils/add_page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter_gastos/utils/login_state.dart';
 import 'package:flutter_gastos/pages/login_page.dart';
 import 'package:flutter_gastos/pages/add_page.dart';
 import 'package:flutter_gastos/pages/home_page.dart';
-import 'config/firebase_config.dart';
+import 'package:flutter_gastos/pages/details_page.dart';
+import 'package:flutter_gastos/config/firebase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +34,22 @@ class MainApp extends StatelessWidget {
             ],
             home: loginState.loggedIn ? HomePage() : LoginPage(),
             onGenerateRoute: (settings) {
-              if (settings.name == '/add') {
-                return AddPageTransition(
-                  AddPage(),
-                );
+              switch (settings.name) {
+                case '/details':
+                  DetailsParams params = settings.arguments as DetailsParams;
+                  if (params != null) {
+                    return MaterialPageRoute(
+                      builder: (BuildContext conetxt) =>
+                          DetailsPage(params: params),
+                    );
+                  }
+                  return null;
+                case '/add':
+                  return MaterialPageRoute(
+                    builder: (context) => AddPage(),
+                  );
+                default:
+                  return null;
               }
             },
           );

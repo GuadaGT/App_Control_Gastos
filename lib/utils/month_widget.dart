@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gastos/pages/details_page.dart';
 import 'package:flutter_gastos/utils/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,13 +16,15 @@ class MonthWidget extends StatefulWidget {
   final Map<String, double> categories;
   final int days;
   final GraphType graphType;
+  final int month;
 
-  MonthWidget(
-      {Key? key,
-      required this.documents,
-      required this.days,
-      required this.graphType})
-      : total = documents.isNotEmpty
+  MonthWidget({
+    Key? key,
+    required this.documents,
+    required this.days,
+    required this.graphType,
+    required this.month,
+  })  : total = documents.isNotEmpty
             ? documents
                 .map((doc) => (doc['value'] as num?) ?? 0.0)
                 .fold(0.0, (a, b) => a + b.toDouble())
@@ -104,7 +107,7 @@ class _MonthWidgetState extends State<MonthWidget> {
       return Container(
         height: 250.0,
         child: PieGraphWidget(
-          data: widget.perDay,
+          data: perCategory,
         ),
       );
     }
@@ -112,6 +115,10 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _item(IconData icon, String name, int percent, double value) {
     return ListTile(
+      onTap: () {
+        Navigator.of(context).pushNamed("/details",
+            arguments: DetailsParams(categoryName: name, month: widget.month));
+      },
       leading: Icon(
         icon,
         size: 32.0,

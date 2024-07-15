@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gastos/utils/login_state.dart';
 import 'package:flutter_gastos/utils/month_widget.dart';
 import 'package:flutter_gastos/utils/utils.dart';
@@ -124,9 +123,10 @@ class _HomePageState extends State<HomePage> {
                   int daysOfMonth =
                       daysInMonth(DateTime.now().year, currentPage + 1);
                   return MonthWidget(
-                    days: daysOfMonth,
                     documents: documents,
+                    days: daysOfMonth,
                     graphType: currentType,
+                    month: DateTime.now().month,
                   );
               }
             },
