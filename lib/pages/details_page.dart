@@ -10,16 +10,21 @@ class DetailsParams {
   DetailsParams({required this.categoryName, required this.month});
 }
 
-class DetailsPage extends StatelessWidget {
+class DetailsPage extends StatefulWidget {
   final DetailsParams params;
 
   const DetailsPage({required this.params});
 
   @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(params.categoryName),
+        title: Text(widget.params.categoryName),
       ),
       body: Consumer<LoginState>(
         builder: (BuildContext context, LoginState loginState, Widget? child) {
@@ -27,16 +32,14 @@ class DetailsPage extends StatelessWidget {
           if (user == null) {
             return Center(child: Text('User not logged in'));
           }
-
           var query = FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid)
               .collection('expenses')
-              .where("month", isEqualTo: params.month)
-              .where("category", isEqualTo: params.categoryName)
-              .orderBy("day", descending: true)
+              .where('month', isEqualTo: widget.params.month)
+              .where('category', isEqualTo: widget.params.categoryName)
+              .orderBy('day', descending: true)
               .snapshots();
-
           return StreamBuilder<QuerySnapshot>(
             stream: query,
             builder:
@@ -44,20 +47,16 @@ class DetailsPage extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               }
-
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
-
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return Center(child: Text('No data available'));
               }
-
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index) {
                   var document = snapshot.data!.docs[index];
-
                   return Dismissible(
                     key: Key(document.id),
                     onDismissed: (direction) {
@@ -88,15 +87,15 @@ class DetailsPage extends StatelessWidget {
                       ),
                       title: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueAccent.withOpacity(0.2),
+                          color: Colors.greenAccent.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "\$${document["value"]}",
+                            "${document["value"]} \€",
                             style: TextStyle(
-                              color: Colors.blueAccent,
+                              color: Colors.black,
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                             ),
