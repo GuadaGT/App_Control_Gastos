@@ -19,6 +19,9 @@ class LoginState with ChangeNotifier {
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   LoginState() {
     _initLoginState();
   }
@@ -82,5 +85,10 @@ class LoginState with ChangeNotifier {
 
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
   }
 }
