@@ -73,10 +73,10 @@ class _AddPageState extends State<AddPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
-        "€${_valueController.text}",
+        "${_valueController.text} \€",
         style: TextStyle(
           fontSize: 50.0,
-          color: Colors.green,
+          color: Color.fromARGB(255, 48, 151, 137),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -161,7 +161,7 @@ class _AddPageState extends State<AddPage> {
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.green,
+          color: Color.fromARGB(255, 71, 187, 172),
         ),
         child: MaterialButton(
           child: Text(
@@ -183,12 +183,29 @@ class _AddPageState extends State<AddPage> {
                 'value': value,
                 'month': DateTime.now().month,
                 'day': DateTime.now().day,
+                'year': DateTime.now().year,
               });
               Navigator.of(context).pop();
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Select a value and a category")),
-              );
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        content:
+                            Text("You need to select a category and a value."),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 71, 187, 172),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ));
             }
           },
         ),

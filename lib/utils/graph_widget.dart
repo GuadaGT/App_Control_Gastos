@@ -16,8 +16,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
     final List<charts.Color> shades = [];
     for (int i = 0; i < count; i++) {
       double opacity = 0.3 + (i / (count - 1)) * 0.7;
-      final shade =
-          charts.ColorUtil.fromDartColor(Colors.green.withOpacity(opacity));
+      final shade = charts.ColorUtil.fromDartColor(
+          Color.fromARGB(255, 71, 187, 172).withOpacity(opacity));
       shades.add(shade);
     }
     return shades;
@@ -63,7 +63,6 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
             datumPair.datum as double;
       });
     }
-
     print(time);
     print(measures);
   }
@@ -73,7 +72,12 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
     List<charts.Series<double, int>> series = [
       charts.Series<double, int>(
         id: 'Gasto',
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        colorFn: (_, __) => charts.Color(
+          r: 71,
+          g: 187,
+          b: 172,
+          a: 255,
+        ),
         domainFn: (value, index) => index ?? 0,
         measureFn: (value, _) => value,
         data: widget.data,

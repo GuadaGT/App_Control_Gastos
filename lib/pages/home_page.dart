@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         notchMargin: 8.0,
+        color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.of(context).pushNamed('/add');
           },
           shape: CircleBorder(),
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 71, 187, 172),
           elevation: 6.0,
         ),
       ),
@@ -141,12 +142,12 @@ class _HomePageState extends State<HomePage> {
     final selected = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
-      color: Colors.green.withOpacity(0.5),
+      color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
     );
     final unSelected = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.normal,
-      color: Colors.green.withOpacity(0.3),
+      color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.3),
     );
 
     if (position == currentPage) {

@@ -55,17 +55,43 @@ class MonthWidget extends StatefulWidget {
 class _MonthWidgetState extends State<MonthWidget> {
   @override
   Widget build(BuildContext context) {
+    if (widget.documents.isEmpty) {
+      return _noDataWidget();
+    }
+
     return Expanded(
       child: Column(
         children: <Widget>[
           _expenses(),
           _graph(),
           Container(
-            color: Colors.greenAccent.withOpacity(0.15),
+            color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.15),
             height: 24.0,
           ),
           _list(),
         ],
+      ),
+    );
+  }
+
+  Widget _noDataWidget() {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/undraw_Not_found_re_bh2e.png', height: 150),
+            SizedBox(height: 20),
+            Text(
+              'No data available',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -85,7 +111,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
-            color: Colors.greenAccent,
+            color: Color.fromARGB(255, 71, 187, 172),
           ),
         ),
       ],
@@ -134,7 +160,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         "$percent% of expenses",
         style: TextStyle(
           fontSize: 16.0,
-          color: Colors.lightGreen,
+          color: Color.fromARGB(255, 71, 187, 172),
         ),
       ),
       trailing: Container(
@@ -145,7 +171,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "\€$value",
+            "$value \€",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,

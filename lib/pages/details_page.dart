@@ -87,7 +87,8 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                       title: Container(
                         decoration: BoxDecoration(
-                          color: Colors.greenAccent.withOpacity(0.2),
+                          color: Color.fromARGB(255, 71, 187, 172)
+                              .withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Padding(
