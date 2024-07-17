@@ -55,20 +55,20 @@ class MonthWidget extends StatefulWidget {
 class _MonthWidgetState extends State<MonthWidget> {
   @override
   Widget build(BuildContext context) {
-    if (widget.documents.isEmpty) {
-      return _noDataWidget();
-    }
-
     return Expanded(
       child: Column(
         children: <Widget>[
-          _expenses(),
-          _graph(),
-          Container(
-            color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.15),
-            height: 24.0,
-          ),
-          _list(),
+          if (widget.documents.isEmpty)
+            _noDataWidget()
+          else ...[
+            _expenses(),
+            _graph(),
+            Container(
+              color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.15),
+              height: 24.0,
+            ),
+            Expanded(child: _list()),
+          ],
         ],
       ),
     );
@@ -76,21 +76,28 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _noDataWidget() {
     return Container(
+      height: 707,
       color: Colors.white,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/undraw_Not_found_re_bh2e.png', height: 150),
-            SizedBox(height: 20),
-            Text(
-              'No data available',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.grey,
+      child: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Image.asset(
+                'assets/undraw_Not_found_re_bh2e.png',
+                height: 150,
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Text(
+                'No data available',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -184,26 +191,24 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _list() {
-    return Expanded(
-      child: ListView.separated(
-        itemCount: widget.categories.keys.length,
-        itemBuilder: (BuildContext context, int index) {
-          var key = widget.categories.keys.elementAt(index);
-          var data = widget.categories[key];
-          return _item(
-            FontAwesomeIcons.shoppingCart,
-            key,
-            widget.total != 0 ? (100 * (data ?? 0.0) ~/ widget.total) : 0,
-            data ?? 0.0,
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return Container(
-            color: Colors.greenAccent.withOpacity(0.15),
-            height: 8.0,
-          );
-        },
-      ),
+    return ListView.separated(
+      itemCount: widget.categories.keys.length,
+      itemBuilder: (BuildContext context, int index) {
+        var key = widget.categories.keys.elementAt(index);
+        var data = widget.categories[key];
+        return _item(
+          FontAwesomeIcons.shoppingCart,
+          key,
+          widget.total != 0 ? (100 * (data ?? 0.0) ~/ widget.total) : 0,
+          data ?? 0.0,
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return Container(
+          color: Colors.greenAccent.withOpacity(0.15),
+          height: 8.0,
+        );
+      },
     );
   }
 }
