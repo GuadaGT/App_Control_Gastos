@@ -86,7 +86,8 @@ class _MonthWidgetState extends State<MonthWidget> {
             children: <Widget>[
               Image.asset(
                 'assets/undraw_Not_found_re_bh2e.png',
-                height: 150,
+                height: 250,
+                width: 300,
               ),
               SizedBox(height: 20),
               Text(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter_gastos/utils/login_state.dart';
 import 'package:flutter_gastos/pages/login_page.dart';
 import 'package:flutter_gastos/pages/add_page.dart';
@@ -23,7 +22,7 @@ class MainApp extends StatelessWidget {
       child: Consumer<LoginState>(
         builder: (context, loginState, child) {
           return MaterialApp(
-            title: "Gastos",
+            title: "Save It!",
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primarySwatch: Colors.green,
