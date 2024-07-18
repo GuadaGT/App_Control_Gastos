@@ -64,7 +64,7 @@ class LoginState with ChangeNotifier {
       }
     } catch (error) {
       print("Error in sign in: $error");
-      throw error;
+      rethrow;
     }
     return null;
   }
@@ -79,7 +79,7 @@ class LoginState with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       print("Error in sign out: $error");
-      throw error;
+      rethrow;
     }
   }
 

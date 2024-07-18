@@ -37,8 +37,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/ahorro.png"
-    background_color: "#FFFFFF" 
-    theme_color: "#FFFFFF"    
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
   windows:
     generate: true
     image_path: "assets/ahorro.png"

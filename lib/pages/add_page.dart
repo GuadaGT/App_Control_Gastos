@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddPage extends StatefulWidget {
-  const AddPage({Key? key}) : super(key: key);
+  const AddPage({super.key});
 
   @override
   _AddPageState createState() => _AddPageState();
@@ -23,7 +23,7 @@ class _AddPageState extends State<AddPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Text(
+        title: const Text(
           "Category",
           style: TextStyle(
             color: Colors.grey,
@@ -32,7 +32,7 @@ class _AddPageState extends State<AddPage> {
         centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.close, color: Colors.black),
+            icon: const Icon(Icons.close, color: Colors.black),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -55,10 +55,10 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _categorySelector() {
-    return Container(
+    return SizedBox(
       height: 80.0,
       child: CategorySelectionWidget(
-        categories: {
+        categories: const {
           "Shopping": Icons.shopping_bag,
           "Gaming": FontAwesomeIcons.gamepad,
           "Bills": FontAwesomeIcons.wallet,
@@ -73,8 +73,8 @@ class _AddPageState extends State<AddPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
-        "${_valueController.text} \€",
-        style: TextStyle(
+        "${_valueController.text} €",
+        style: const TextStyle(
           fontSize: 50.0,
           color: Color.fromARGB(255, 48, 151, 137),
           fontWeight: FontWeight.bold,
@@ -102,14 +102,14 @@ class _AddPageState extends State<AddPage> {
       onTap: () {
         _addDigit(text);
       },
-      child: Container(
+      child: SizedBox(
         height: height,
         child: Center(
           child: text == "backspace"
-              ? Icon(Icons.backspace, color: Colors.grey, size: 40)
+              ? const Icon(Icons.backspace, color: Colors.grey, size: 40)
               : Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 40,
                     color: Colors.grey,
                   ),
@@ -160,11 +160,11 @@ class _AddPageState extends State<AddPage> {
       child: Container(
         height: 50,
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color.fromARGB(255, 71, 187, 172),
         ),
         child: MaterialButton(
-          child: Text(
+          child: const Text(
             "Add expenses",
             style: TextStyle(color: Colors.black, fontSize: 20.0),
           ),
@@ -190,11 +190,11 @@ class _AddPageState extends State<AddPage> {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        content:
-                            Text("You need to select a category and a value."),
+                        content: const Text(
+                            "You need to select a category and a value."),
                         actions: <Widget>[
                           ElevatedButton(
-                            child: Text(
+                            child: const Text(
                               "OK",
                               style: TextStyle(
                                 color: Color.fromARGB(255, 71, 187, 172),

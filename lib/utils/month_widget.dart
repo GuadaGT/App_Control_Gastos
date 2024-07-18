@@ -19,7 +19,7 @@ class MonthWidget extends StatefulWidget {
   final int month;
 
   MonthWidget({
-    Key? key,
+    super.key,
     required this.documents,
     required this.days,
     required this.graphType,
@@ -45,8 +45,7 @@ class MonthWidget extends StatefulWidget {
                 map[category] = map[category]! + value;
                 return map;
               })
-            : {},
-        super(key: key);
+            : {};
 
   @override
   _MonthWidgetState createState() => _MonthWidgetState();
@@ -64,7 +63,7 @@ class _MonthWidgetState extends State<MonthWidget> {
             _expenses(),
             _graph(),
             Container(
-              color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.15),
+              color: const Color.fromARGB(255, 71, 187, 172).withOpacity(0.15),
               height: 24.0,
             ),
             Expanded(child: _list()),
@@ -89,8 +88,8 @@ class _MonthWidgetState extends State<MonthWidget> {
                 height: 250,
                 width: 300,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'No data available',
                 style: TextStyle(
                   fontSize: 20,
@@ -108,13 +107,13 @@ class _MonthWidgetState extends State<MonthWidget> {
     return Column(
       children: <Widget>[
         Text(
-          "\€${widget.total.toStringAsFixed(2)}",
-          style: TextStyle(
+          "${widget.total.toStringAsFixed(2)}€",
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 40.0,
           ),
         ),
-        Text(
+        const Text(
           "Total expenses",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -128,7 +127,7 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _graph() {
     if (widget.graphType == GraphType.LINES) {
-      return Container(
+      return SizedBox(
         height: 250.0,
         child: LinesGraphWidget(
           data: widget.perDay,
@@ -138,7 +137,7 @@ class _MonthWidgetState extends State<MonthWidget> {
       var perCategory = widget.categories.keys
           .map((name) => widget.categories[name]! / widget.total)
           .toList();
-      return Container(
+      return SizedBox(
         height: 250.0,
         child: PieGraphWidget(
           data: perCategory,
@@ -159,14 +158,14 @@ class _MonthWidgetState extends State<MonthWidget> {
       ),
       title: Text(
         name,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20.0,
         ),
       ),
       subtitle: Text(
         "$percent% of expenses",
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16.0,
           color: Color.fromARGB(255, 71, 187, 172),
         ),
@@ -179,8 +178,8 @@ class _MonthWidgetState extends State<MonthWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "$value \€",
-            style: TextStyle(
+            "$value €",
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
@@ -198,7 +197,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         var key = widget.categories.keys.elementAt(index);
         var data = widget.categories[key];
         return _item(
-          FontAwesomeIcons.shoppingCart,
+          FontAwesomeIcons.moneyBill,
           key,
           widget.total != 0 ? (100 * (data ?? 0.0) ~/ widget.total) : 0,
           data ?? 0.0,

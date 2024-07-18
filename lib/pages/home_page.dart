@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:rect_getter/rect_getter.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -62,8 +64,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         notchMargin: 8.0,
-        color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
-        shape: CircularNotchedRectangle(),
+        color: const Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
+        shape: const CircularNotchedRectangle(),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -78,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                 currentType = GraphType.PIE;
               });
             }),
-            SizedBox(width: 48.0),
+            const SizedBox(width: 48.0),
             _bottomAction(FontAwesomeIcons.wallet, () {}),
             _bottomAction(Icons.settings, () {
               Provider.of<LoginState>(context, listen: false).logout();
@@ -90,14 +92,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: RectGetter(
         key: globalKey,
         child: FloatingActionButton(
-          child: Icon(Icons.add),
           onPressed: () {
             buttonRect = RectGetter.getRectFromKey(globalKey)!;
             Navigator.of(context).pushNamed('/add');
           },
-          shape: CircleBorder(),
-          backgroundColor: Color.fromARGB(255, 71, 187, 172),
+          shape: const CircleBorder(),
+          backgroundColor: const Color.fromARGB(255, 71, 187, 172),
           elevation: 6.0,
+          child: const Icon(Icons.add),
         ),
       ),
       body: _body(),
@@ -118,7 +120,7 @@ class _HomePageState extends State<HomePage> {
               }
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 default:
                   List<DocumentSnapshot> documents = snapshot.data?.docs ?? [];
                   int daysOfMonth =
@@ -138,27 +140,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _pageItem(String name, int position) {
-    var _alignment;
+    Alignment alignment;
     final selected = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
-      color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
+      color: const Color.fromARGB(255, 71, 187, 172).withOpacity(0.5),
     );
     final unSelected = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.normal,
-      color: Color.fromARGB(255, 71, 187, 172).withOpacity(0.3),
+      color: const Color.fromARGB(255, 71, 187, 172).withOpacity(0.3),
     );
 
     if (position == currentPage) {
-      _alignment = Alignment.center;
+      alignment = Alignment.center;
     } else if (position > currentPage) {
-      _alignment = Alignment.centerRight;
+      alignment = Alignment.centerRight;
     } else {
-      _alignment = Alignment.centerLeft;
+      alignment = Alignment.centerLeft;
     }
     return Align(
-      alignment: _alignment,
+      alignment: alignment,
       child: Text(
         name,
         style: position == currentPage ? selected : unSelected,
@@ -168,7 +170,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _selector() {
     return SizedBox.fromSize(
-      size: Size.fromHeight(70.0),
+      size: const Size.fromHeight(70.0),
       child: PageView(
         onPageChanged: (newPage) {
           setState(() {

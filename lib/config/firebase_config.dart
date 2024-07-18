@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 class FirebaseConfig {
   static Future<void> initializeFirebase() async {
     await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
         apiKey: "AIzaSyA27hMN6dvPIXmHsFJ5cozJweDOvak21j8",
         authDomain: "gastos-47fab.firebaseapp.com",
         projectId: "gastos-47fab",

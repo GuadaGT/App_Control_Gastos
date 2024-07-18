@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -17,7 +15,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
     for (int i = 0; i < count; i++) {
       double opacity = 0.3 + (i / (count - 1)) * 0.7;
       final shade = charts.ColorUtil.fromDartColor(
-          Color.fromARGB(255, 71, 187, 172).withOpacity(opacity));
+          const Color.fromARGB(255, 71, 187, 172).withOpacity(opacity));
       shades.add(shade);
     }
     return shades;
@@ -43,7 +41,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
 class LinesGraphWidget extends StatefulWidget {
   final List<double> data;
 
-  const LinesGraphWidget({Key? key, required this.data}) : super(key: key);
+  const LinesGraphWidget({super.key, required this.data});
 
   @override
   _LinesGraphWidgetState createState() => _LinesGraphWidgetState();
@@ -58,10 +56,10 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
 
     if (selectedDatum.isNotEmpty) {
       time = selectedDatum.first.datum;
-      selectedDatum.forEach((charts.SeriesDatum datumPair) {
+      for (var datumPair in selectedDatum) {
         measures[datumPair.series.displayName ?? ''] =
             datumPair.datum as double;
-      });
+      }
     }
     print(time);
     print(measures);
@@ -72,7 +70,7 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
     List<charts.Series<double, int>> series = [
       charts.Series<double, int>(
         id: 'Gasto',
-        colorFn: (_, __) => charts.Color(
+        colorFn: (_, __) => const charts.Color(
           r: 71,
           g: 187,
           b: 172,
@@ -94,7 +92,7 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
           changedListener: _onSelectionChanged,
         )
       ],
-      domainAxis: charts.NumericAxisSpec(
+      domainAxis: const charts.NumericAxisSpec(
         tickProviderSpec: charts.StaticNumericTickProviderSpec(
           [
             charts.TickSpec(0, label: '01'),
@@ -107,7 +105,7 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
           ],
         ),
       ),
-      primaryMeasureAxis: charts.NumericAxisSpec(
+      primaryMeasureAxis: const charts.NumericAxisSpec(
         tickProviderSpec: charts.BasicNumericTickProviderSpec(
           desiredTickCount: 4,
         ),
