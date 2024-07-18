@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gastos/pages/details_page.dart';
+import 'package:flutter_gastos/utils/category_icons_widget.dart';
 import 'package:flutter_gastos/utils/graph_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -147,13 +148,17 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {
+    IconData categoryIcon = categoryIcons[name] ?? FontAwesomeIcons.moneyBill;
+
     return ListTile(
       onTap: () {
-        Navigator.of(context).pushNamed("/details",
-            arguments: DetailsParams(categoryName: name, month: widget.month));
+        Navigator.of(context).pushNamed(
+          "/details",
+          arguments: DetailsParams(categoryName: name, month: widget.month),
+        );
       },
       leading: Icon(
-        icon,
+        categoryIcon,
         size: 32.0,
       ),
       title: Text(

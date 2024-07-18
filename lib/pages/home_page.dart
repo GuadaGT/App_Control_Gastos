@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gastos/pages/expenses_category_page.dart';
 import 'package:flutter_gastos/utils/login_state.dart';
 import 'package:flutter_gastos/utils/month_widget.dart';
 import 'package:flutter_gastos/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rect_getter/rect_getter.dart';
+import 'package:flutter_gastos/repository/expenses_repository.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,12 +42,8 @@ class _HomePageState extends State<HomePage> {
 
     final user = Provider.of<LoginState>(context, listen: false).user;
     if (user != null) {
-      _query = FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('expenses')
-          .where('month', isEqualTo: currentPage + 1)
-          .snapshots();
+      final expensesRepository = ExpensesRepository(user.uid);
+      _query = expensesRepository.queryByMonth(currentPage + 1);
     }
   }
 
@@ -81,7 +79,13 @@ class _HomePageState extends State<HomePage> {
               });
             }),
             const SizedBox(width: 48.0),
-            _bottomAction(FontAwesomeIcons.wallet, () {}),
+            _bottomAction(FontAwesomeIcons.wallet, () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ExpensesByCategoryPage(),
+                ),
+              );
+            }),
             _bottomAction(Icons.settings, () {
               Provider.of<LoginState>(context, listen: false).logout();
             }),

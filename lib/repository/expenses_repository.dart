@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ExpensesRepository {
   final String userId;
   ExpensesRepository(this.userId);
-  get userRef => null;
+
+  CollectionReference get userRef => FirebaseFirestore.instance
+      .collection('users')
+      .doc(userId)
+      .collection('expenses');
 
   Stream<QuerySnapshot> queryByCategory(int month, String categoryName) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('expenses')
+    return userRef
         .where('month', isEqualTo: month)
         .where('category', isEqualTo: categoryName)
         .orderBy('day', descending: true)
@@ -17,31 +18,24 @@ class ExpensesRepository {
   }
 
   Stream<QuerySnapshot> queryByMonth(int month) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('expenses')
-        .where('month', isEqualTo: month)
-        .snapshots();
+    return userRef.where('month', isEqualTo: month).snapshots();
   }
 
-  delete(String documentId) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('expenses')
-        .doc(documentId)
-        .delete();
+  Stream<QuerySnapshot> queryAllExpensesGroupedByCategory() {
+    return userRef.snapshots();
   }
 
-  add(String categoryName, int value, DateTime date) async {
-    FirebaseFirestore.instance.collection('users').doc(userId);
-    await userRef.collection('expenses').add({
+  Future<void> delete(String documentId) {
+    return userRef.doc(documentId).delete();
+  }
+
+  Future<void> add(String categoryName, int value, DateTime date) async {
+    await userRef.add({
       'category': categoryName,
       'value': value,
-      'month': DateTime.now().month,
-      'day': DateTime.now().day,
-      'year': DateTime.now().year,
+      'month': date.month,
+      'day': date.day,
+      'year': date.year,
     });
   }
 }

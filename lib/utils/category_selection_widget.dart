@@ -36,7 +36,9 @@ class CategoryWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25.0),
                 border: Border.all(
-                    color: selected ? Colors.greenAccent : Colors.grey,
+                    color: selected
+                        ? const Color.fromARGB(255, 186, 105, 240)
+                        : Colors.grey,
                     width: selected ? 3.0 : 1.0)),
             child: Icon(icon),
           ),
