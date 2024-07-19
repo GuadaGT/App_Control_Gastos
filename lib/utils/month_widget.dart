@@ -76,7 +76,7 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _noDataWidget() {
     return Container(
-      height: 707,
+      height: 785,
       color: Colors.white,
       child: SafeArea(
         child: Center(
