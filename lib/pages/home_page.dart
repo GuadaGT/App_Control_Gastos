@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
             _bottomAction(FontAwesomeIcons.wallet, () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ExpensesByCategoryPage(),
+                  builder: (context) => const ExpensesByCategoryPage(),
                 ),
               );
             }),

@@ -59,7 +59,7 @@ class LoginState with ChangeNotifier {
         _loggedIn = true;
         await _prefs?.setBool("isLoggedIn", true);
         notifyListeners();
-        print("Signed in " + user.displayName!);
+        print("Signed in ${user.displayName!}");
         return user;
       }
     } catch (error) {

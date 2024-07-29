@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="flutter_gastos"
+        android:label="Save_it.save_it"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

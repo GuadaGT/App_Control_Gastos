@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gastos/repository/expenses_repository.dart';
 
 class ExpensesByCategoryPage extends StatelessWidget {
-  ExpensesByCategoryPage({super.key});
+  const ExpensesByCategoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
